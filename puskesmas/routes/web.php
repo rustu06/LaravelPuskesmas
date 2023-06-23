@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\DeshboardController;
 use App\Http\Controllers\PasienController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,15 +17,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [DeshboardController::class, 'index']) ->middleware('auth');
 
 // ruete untuk menampilkan daftar pasien 
-route::get('/pasien', [PasienController::class, 'index']);
+route::get('/pasien', [PasienController::class, 'index']) ->middleware('auth');
 
 // Route untuk menampilkan form tambahan pasien
-Route::get('/pasien/create', [PasienController::class, "create"]);
+Route::get('/pasien/create', [PasienController::class, "create"]) ->middleware('auth');
 
-// Route untuk memperoses from tambahan 
-Route::post('/pasien',  [pasienController::class, 'store']);
+// Route untuk memperoses from tambahan pasien 
+Route::post('/pasien',  [pasienController::class, 'store']) ->middleware('auth');
+
+//
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
